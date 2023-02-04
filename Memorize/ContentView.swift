@@ -29,7 +29,6 @@ struct ContentView: View {
                 buttonChoseThemeFruits
                 Spacer()
                 buttonChoseThemeTransport
-                // Test change
             }
             .font(.largeTitle)
             .padding(.horizontal)

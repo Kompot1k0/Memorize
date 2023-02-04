@@ -24,11 +24,12 @@ struct ContentView: View {
             }
             Spacer()
             HStack{
-                button1
+                buttonChoseThemeAnimals
                 Spacer()
-                button2
+                buttonChoseThemeFruits
                 Spacer()
-                button3
+                buttonChoseThemeTransport
+                // Test change
             }
             .font(.largeTitle)
             .padding(.horizontal)
@@ -36,7 +37,7 @@ struct ContentView: View {
         .padding(.horizontal)
     }
     
-    var button1: some View {
+    var buttonChoseThemeAnimals: some View {
         VStack{
             Button{theme = choseTheme(1).shuffled(); cardCount = Int.random(in: 9...20)}
                 label: {Image(systemName: "pawprint.circle");
@@ -45,7 +46,7 @@ struct ContentView: View {
                 .font(.headline)
         }
     }
-    var button2: some View{
+    var buttonChoseThemeFruits: some View{
         VStack{
             Button{theme = choseTheme(2).shuffled(); cardCount = Int.random(in: 9...20)}
                 label: {Image(systemName: "fork.knife.circle")
@@ -54,7 +55,7 @@ struct ContentView: View {
                 .font(.headline)
         }
     }
-    var button3: some View{
+    var buttonChoseThemeTransport: some View{
         VStack{
             Button{theme = choseTheme(3).shuffled(); cardCount = Int.random(in: 9...20)}
                 label: {Image(systemName: "car.circle")
@@ -68,29 +69,29 @@ struct ContentView: View {
 func choseTheme(_ chosenTheme: Int) -> [String]{
     
     enum Themes{
-        case theme1
-        case theme2
-        case theme3
+        case themeAnimals
+        case themeFruits
+        case themeTransport
     }
     
-    var theme = Themes.theme1
+    var theme = Themes.themeAnimals
     
     if chosenTheme == 1{
-        theme = Themes.theme1
+        theme = Themes.themeAnimals
     }else if chosenTheme == 2{
-        theme = Themes.theme2
+        theme = Themes.themeFruits
     }else{
-        theme = Themes.theme3
+        theme = Themes.themeTransport
     }
     
     switch theme{
-        case .theme1:
+        case .themeAnimals:
             let emojis = ["🐶", "🐹", "🐱", "🐭", "🐰", "🦊", "🐻", "🐼", "🐻‍❄️", "🐨", "🐯", "🦁", "🐮", "🐷", "🐸", "🐵", "🦆", "🦇", "🦫", "🦚"]
             return emojis
-        case .theme2:
+        case .themeFruits:
         let emojis = ["🍎", "🍏", "🍊", "🍐", "🍌", "🍉", "🍇", "🍓", "🫐", "🍈", "🍒", "🍑", "🥭", "🍍", "🥥", "🥝", "🍅", "🍆", "🥑", "🥦"]
         return emojis
-        case .theme3:
+        case .themeTransport:
         let emojis = ["🚕", "🚙", "🚌", "🚎", "🏎", "🚓", "🚑", "🚒", "🚐", "🛻", "🚚", "🚛", "🚜", "🛵", "🏍", "🛺", "🚃", "🚂", "🚁", "🚀"]
         return emojis
     }
@@ -112,8 +113,6 @@ struct CardView: View{
                     
             } else {
                 shape.fill()
-//                Text("ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ⠀")
-//                    .font(.largeTitle)
             }
         }
         .onTapGesture {

@@ -17,7 +17,8 @@ struct ContentView: View {
                 .fontWeight(.bold)
             ScrollView{
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 75))]){
-                    ForEach(viewModel.cards) {card in CardView(card: card)
+                    ForEach(viewModel.cards) {card in
+                        CardView(card: card)
                             .aspectRatio(2/3, contentMode: .fit)
                             .onTapGesture {
                                 viewModel.choose(card)
@@ -25,7 +26,7 @@ struct ContentView: View {
                     }.padding(-1.0)
                 }.foregroundColor(Color(EmojiMemorize.thema.colorOfCard))
             }
-            Spacer()
+            //Spacer()
             .font(.largeTitle)
             .padding(.horizontal)
         }
@@ -40,7 +41,7 @@ struct CardView: View{
     var body: some View{
         let shape = RoundedRectangle(cornerRadius: 20)
         ZStack {
-            if card.isFaceUp{
+            if card.isFaceUp {
                 shape.fill().foregroundColor(.white)
                 shape.strokeBorder(lineWidth: 3)
                 Text(card.content)
@@ -70,7 +71,9 @@ struct CardView: View{
     
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
+        
         let game = EmojiMemorize()
+        
         ContentView(viewModel: game)
             .preferredColorScheme(.dark)
         ContentView(viewModel: game)

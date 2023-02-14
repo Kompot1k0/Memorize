@@ -10,8 +10,8 @@ import SwiftUI
 class EmojiMemorize: ObservableObject {
     
     static func createMemoryGame() -> MemorizeGame<String> {
-        MemorizeGame<String>(numberOfPairsOfCards: EmojiMemorize.thema.numberOfPairs) { pairIndex in
-            EmojiMemorize.thema.emojis[pairIndex]
+        let emojis = shuffledEmojis(emojis: thema.emojis, numberOfEmojis: thema.numberOfPairs)
+        return MemorizeGame<String>(numberOfPairsOfCards: thema.numberOfPairs) { pairIndex in emojis[pairIndex]
         }
     }
     
@@ -26,6 +26,26 @@ class EmojiMemorize: ObservableObject {
         model.choose(card)
     }
     
-    static var themes = MemorizeGame<String>.Themes()
-    static var thema = MemorizeGame<String>.Themes.AnimalsTheme()
+    struct Themes{
+        var animals = MemorizeGame<String>.AnimalsTheme()
+        var fruits = MemorizeGame<String>.FruitsTheme()
+        var music = MemorizeGame<String>.MusicTheme()
+        var balls = MemorizeGame<String>.BallsTheme()
+        var cars = MemorizeGame<String>.CarsTheme()
+        var flags = MemorizeGame<String>.FlagsTheme()
+    }
+    
+    static let themes = Themes()
+    static var thema = themes.animals
+    static var themaColor = thema.colorOfCard
+    
+    static func shuffledEmojis (emojis: [String], numberOfEmojis: Int) -> [String] {
+        let shuffledEmojis = emojis.shuffled()
+        var createdEmojis = Array(repeating: "🐸", count: numberOfEmojis)
+        for emoji in createdEmojis.indices {
+            createdEmojis[emoji] = (shuffledEmojis[emoji])
+        }
+        return createdEmojis
+    }
+
 }

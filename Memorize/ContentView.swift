@@ -10,9 +10,12 @@ import SwiftUI
 struct ContentView: View {
     @ObservedObject var viewModel: EmojiMemorize
     
+    var thema = EmojiMemorize.thema
+    var colorOfActualThema = Color(EmojiMemorize.themaColor)
+    
     var body: some View {
         VStack{
-            Text(EmojiMemorize.thema.name)
+            Text(thema.name)
                 .font(.title)
                 .fontWeight(.bold)
             ScrollView{
@@ -24,11 +27,10 @@ struct ContentView: View {
                                 viewModel.choose(card)
                             }
                     }.padding(-1.0)
-                }.foregroundColor(Color(EmojiMemorize.thema.colorOfCard))
+                }.foregroundColor(.yellow)
             }
-            //Spacer()
+            Spacer()
             .font(.largeTitle)
-            .padding(.horizontal)
         }
         .padding(.horizontal)
     }

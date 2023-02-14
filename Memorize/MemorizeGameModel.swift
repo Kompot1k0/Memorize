@@ -13,14 +13,14 @@ struct MemorizeGame<CardContent> where CardContent: Equatable{
     
     private var indexOfOneFaceUpCard: Int?
     
-    mutating func choose(_ card: Card){
-        if let choosenIndex = cards.firstIndex(where: { $0.id == card.id }),
-           !cards[choosenIndex].isFaceUp,
-           !cards[choosenIndex].isMatched
+    mutating func choose(_ card: Card) {
+        if let chosenIndex = cards.firstIndex(where: { $0.id == card.id}),
+           !cards[chosenIndex].isFaceUp,
+           !cards[chosenIndex].isMatched
         {
             if let potentialMatchIndex = indexOfOneFaceUpCard {
-                if cards[choosenIndex].content == cards[potentialMatchIndex].content {
-                    cards[choosenIndex].isMatched = true
+                if cards[chosenIndex].content == cards[potentialMatchIndex].content {
+                    cards[chosenIndex].isMatched = true
                     cards[potentialMatchIndex].isMatched = true
                 }
                 indexOfOneFaceUpCard = nil
@@ -28,15 +28,15 @@ struct MemorizeGame<CardContent> where CardContent: Equatable{
                 for index in cards.indices {
                     cards[index].isFaceUp = false
                 }
-                indexOfOneFaceUpCard = choosenIndex
+                indexOfOneFaceUpCard = chosenIndex
             }
-            cards[choosenIndex].isFaceUp.toggle()
+            cards[chosenIndex].isFaceUp.toggle()
         }
         print("\(cards)")
     }
     
     struct Card: Identifiable{
-        var isFaceUp: Bool = false
+        var isFaceUp: Bool = true
         var isMatched: Bool = false
         var content: CardContent
         var id: Int
@@ -49,14 +49,14 @@ struct MemorizeGame<CardContent> where CardContent: Equatable{
             cards.append(Card(content: content, id: pairIndex*2))
             cards.append(Card(content: content, id: pairIndex*2+1))
         }
+        cards = cards.shuffled()
     }
     
-    struct Themes{
         struct AnimalsTheme: EmojiTheme{
             var name: String = "Animals"
             var emojis: [String] = ["🐶", "🐱", "🐭", "🐹", "🐰", "🦊", "🐻", "🐼", "🐻‍❄️", "🐨", "🐸", "🐥"]
             var numberOfPairs: Int = 7
-            var colorOfCard: String = ".red"
+            var colorOfCard: String = "red"
         }
         
         struct FruitsTheme: EmojiTheme{
@@ -93,7 +93,6 @@ struct MemorizeGame<CardContent> where CardContent: Equatable{
             var numberOfPairs: Int = 9
             var colorOfCard: String = "yellow"
         }
-    }
 }
 
 protocol EmojiTheme{

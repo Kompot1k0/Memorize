@@ -36,7 +36,7 @@ struct MemorizeGame<CardContent> where CardContent: Equatable{
     }
     
     struct Card: Identifiable{
-        var isFaceUp: Bool = true
+        var isFaceUp: Bool = false
         var isMatched: Bool = false
         var content: CardContent
         var id: Int
@@ -50,6 +50,23 @@ struct MemorizeGame<CardContent> where CardContent: Equatable{
             cards.append(Card(content: content, id: pairIndex*2+1))
         }
         cards = cards.shuffled()
+    }
+    
+    func chooseRandTheme() -> EmojiTheme{
+        let randKey = Int.random(in: 1...6)
+        if randKey == 1 {
+            return AnimalsTheme()
+        } else if randKey == 2 {
+            return FruitsTheme()
+        } else if randKey == 3 {
+            return MusicTheme()
+        } else if randKey == 4 {
+            return BallsTheme()
+        } else if randKey == 5 {
+            return CarsTheme()
+        } else {
+            return FlagsTheme()
+        }
     }
     
         struct AnimalsTheme: EmojiTheme{
@@ -75,7 +92,7 @@ struct MemorizeGame<CardContent> where CardContent: Equatable{
         
         struct BallsTheme: EmojiTheme{
             var name: String = "Balls"
-            var emojis: [String] = ["⚽️", "🏀", "🏈", "⚾️", "🥎", "🎾", "🏐", "🏉", "🎱"]
+            var emojis: [String] = ["⚽️", "🏀", "🏈", "⚾️", "🥎", "🎾", "🏐", "🏉", "🎱", "🥏"]
             var numberOfPairs: Int = 4
             var colorOfCard: String = "green"
         }

@@ -10,14 +10,12 @@ import SwiftUI
 struct ContentView: View {
     @ObservedObject var viewModel: EmojiMemorize
     
-    var thema = EmojiMemorize.thema
-    var colorOfActualThema = Color(EmojiMemorize.themaColor)
-    
     var body: some View {
         VStack{
-            Text(thema.name)
+            Text(EmojiMemorize.thema.name)
                 .font(.title)
                 .fontWeight(.bold)
+                
             ScrollView{
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 75))]){
                     ForEach(viewModel.cards) {card in
@@ -27,10 +25,16 @@ struct ContentView: View {
                                 viewModel.choose(card)
                             }
                     }.padding(-1.0)
-                }.foregroundColor(.yellow)
+                }.foregroundColor(viewModel.convertColorOfThema(color: EmojiMemorize.thema.colorOfCard))
             }
             Spacer()
             .font(.largeTitle)
+            Button(action: viewModel.newGame) {
+                Text("New Game")
+                    .font(.title)
+                    .foregroundColor(viewModel.convertColorOfThema(color: EmojiMemorize.thema.colorOfCard))
+                    
+            }
         }
         .padding(.horizontal)
     }

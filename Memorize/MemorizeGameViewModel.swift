@@ -10,7 +10,7 @@ import SwiftUI
 class EmojiMemorize: ObservableObject {
     
     static func createMemoryGame() -> MemorizeGame<String> {
-        let emojis = shuffledEmojis(emojis: thema.emojis, numberOfEmojis: thema.numberOfPairs)
+        let emojis = thema.emojis.shuffled()
         return MemorizeGame<String>(numberOfPairsOfCards: thema.numberOfPairs) { pairIndex in emojis[pairIndex]
         }
     }
@@ -18,14 +18,25 @@ class EmojiMemorize: ObservableObject {
     
     @Published private var model: MemorizeGame<String> = createMemoryGame()
     
+    static var thema: EmojiTheme = themes.animals
+//    static var colorOfThema = Color.mint
+    
     var cards: Array<MemorizeGame<String>.Card> {
         model.cards
+    }
+    
+    func newGame() {
+        let numberOfPairs = [6, 7, 8, 9, 10]
+        EmojiMemorize.thema = EmojiMemorize.chooseRandTheme()
+        EmojiMemorize.thema.numberOfPairs = numberOfPairs.randomElement() ?? 6
+        model = EmojiMemorize.createMemoryGame()
     }
     
     func choose(_ card: MemorizeGame<String>.Card) {
         model.choose(card)
     }
     
+    //MARK: initialize themes and choose default one
     struct Themes{
         var animals = MemorizeGame<String>.AnimalsTheme()
         var fruits = MemorizeGame<String>.FruitsTheme()
@@ -36,16 +47,37 @@ class EmojiMemorize: ObservableObject {
     }
     
     static let themes = Themes()
-    static var thema = themes.animals
-    static var themaColor = thema.colorOfCard
     
-    static func shuffledEmojis (emojis: [String], numberOfEmojis: Int) -> [String] {
-        let shuffledEmojis = emojis.shuffled()
-        var createdEmojis = Array(repeating: "🐸", count: numberOfEmojis)
-        for emoji in createdEmojis.indices {
-            createdEmojis[emoji] = (shuffledEmojis[emoji])
+    static func chooseRandTheme() -> EmojiTheme{
+        let randKey = Int.random(in: 1...6)
+        if randKey == 1 {
+            return EmojiMemorize.themes.animals
+        } else if randKey == 2 {
+            return EmojiMemorize.themes.fruits
+        } else if randKey == 3 {
+            return EmojiMemorize.themes.music
+        } else if randKey == 4 {
+            return EmojiMemorize.themes.balls
+        } else if randKey == 5 {
+            return EmojiMemorize.themes.cars
+        } else {
+            return EmojiMemorize.themes.flags
         }
-        return createdEmojis
     }
-
+    
+    func convertColorOfThema (color: String) -> Color{
+        if color == "red" {
+            return Color.red
+        } else if color == "orange" {
+            return Color.orange
+        } else if color == "yellow" {
+            return Color.yellow
+        } else if color == "gray" {
+            return Color.gray
+        } else if color == "green" {
+            return Color.green
+        } else {
+            return Color.blue
+        }
+    }
 }

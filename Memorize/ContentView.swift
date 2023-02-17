@@ -29,6 +29,8 @@ struct ContentView: View {
             }
             Spacer()
             .font(.largeTitle)
+            Text("Score: \(viewModel.score)")
+                .font(.title3)
             Button(action: viewModel.newGame) {
                 Text("New Game")
                     .font(.title)

@@ -13,6 +13,8 @@ struct MemorizeGame<CardContent> where CardContent: Equatable{
     
     private var indexOfOneFaceUpCard: Int?
     
+    private(set) var score: Int = 0
+    
     mutating func choose(_ card: Card) {
         if let chosenIndex = cards.firstIndex(where: { $0.id == card.id}),
            !cards[chosenIndex].isFaceUp,
@@ -22,7 +24,13 @@ struct MemorizeGame<CardContent> where CardContent: Equatable{
                 if cards[chosenIndex].content == cards[potentialMatchIndex].content {
                     cards[chosenIndex].isMatched = true
                     cards[potentialMatchIndex].isMatched = true
+                    increaseScore()
                 }
+                reduceScore(cards[chosenIndex].isAlreadyBeenSeen, cards[potentialMatchIndex].isAlreadyBeenSeen,
+                    cards[chosenIndex].isMatched,
+                    cards[potentialMatchIndex].isMatched)
+                cards[chosenIndex].isAlreadyBeenSeen = true
+                cards[potentialMatchIndex].isAlreadyBeenSeen = true
                 indexOfOneFaceUpCard = nil
             } else {
                 for index in cards.indices {
@@ -35,11 +43,25 @@ struct MemorizeGame<CardContent> where CardContent: Equatable{
         print("\(cards)")
     }
     
+    mutating func increaseScore() {
+        score = score + 2
+    }
+    
+    mutating func reduceScore(_ card1: Bool, _ card2: Bool, _ card1IsMatched: Bool, _ card2IsMatched: Bool) {
+        if card1 && !card1IsMatched{
+            score = score - 1
+        }
+        if card2 && !card2IsMatched{
+            score = score - 1
+        }
+    }
+    
     struct Card: Identifiable{
         var isFaceUp: Bool = false
         var isMatched: Bool = false
         var content: CardContent
         var id: Int
+        var isAlreadyBeenSeen: Bool = false
     }
     
     init(numberOfPairsOfCards: Int, createCardContent: (Int) -> CardContent) {

@@ -19,7 +19,11 @@ class EmojiMemorize: ObservableObject {
     @Published private var model: MemorizeGame<String> = createMemoryGame()
     
     static var thema: EmojiTheme = themes.animals
-//    static var colorOfThema = Color.mint
+    
+    //MARK: Спросить почему так 
+    var score: Int {
+        model.score
+    }
     
     var cards: Array<MemorizeGame<String>.Card> {
         model.cards

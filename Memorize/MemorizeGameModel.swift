@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct MemorizeGame<CardContent> where CardContent: Equatable{
+struct MemorizeGame<CardContent> where CardContent: Equatable {
     
     private(set) var cards: Array<Card>
     
@@ -40,23 +40,22 @@ struct MemorizeGame<CardContent> where CardContent: Equatable{
             }
             cards[chosenIndex].isFaceUp.toggle()
         }
-        print("\(cards)")
     }
     
     mutating func increaseScore() {
-        score = score + 2
+        score += 2
     }
     
     mutating func reduceScore(_ card1: Bool, _ card2: Bool, _ card1IsMatched: Bool, _ card2IsMatched: Bool) {
-        if card1 && !card1IsMatched{
-            score = score - 1
+        if card1 && !card1IsMatched {
+            score -= 1
         }
         if card2 && !card2IsMatched{
-            score = score - 1
+            score -= 1
         }
     }
     
-    struct Card: Identifiable{
+    struct Card: Identifiable {
         var isFaceUp: Bool = false
         var isMatched: Bool = false
         var content: CardContent
@@ -91,53 +90,59 @@ struct MemorizeGame<CardContent> where CardContent: Equatable{
         }
     }
     
-        struct AnimalsTheme: EmojiTheme{
+        struct AnimalsTheme: EmojiTheme {
             var name: String = "Animals"
             var emojis: [String] = ["🐶", "🐱", "🐭", "🐹", "🐰", "🦊", "🐻", "🐼", "🐻‍❄️", "🐨", "🐸", "🐥"]
             var numberOfPairs: Int = 7
             var colorOfCard: String = "red"
+            var secondColorForGradient: String = "blue"
         }
         
-        struct FruitsTheme: EmojiTheme{
+        struct FruitsTheme: EmojiTheme {
             var name: String = "Fruits"
             var emojis: [String] = ["🍏", "🍎", "🍐", "🍊", "🍋", "🍌", "🍉", "🍇", "🍓", "🫐", "🍈", "🍒", "🍑"]
             var numberOfPairs: Int = 5
             var colorOfCard: String = "orange"
+            var secondColorForGradient: String = "gray"
         }
         
-        struct MusicTheme: EmojiTheme{
+        struct MusicTheme: EmojiTheme {
             var name: String = "Music"
             var emojis: [String] = ["🎤", "🎧", "🎼", "🎹", "🥁", "🪘", "🎷", "🎺", "🪗", "🎸", "🪕", "🎻"]
             var numberOfPairs: Int = 6
             var colorOfCard: String = "blue"
+            var secondColorForGradient: String = "orange"
         }
         
-        struct BallsTheme: EmojiTheme{
+        struct BallsTheme: EmojiTheme {
             var name: String = "Balls"
             var emojis: [String] = ["⚽️", "🏀", "🏈", "⚾️", "🥎", "🎾", "🏐", "🏉", "🎱", "🥏"]
             var numberOfPairs: Int = 4
             var colorOfCard: String = "green"
+            var secondColorForGradient: String = "yellow"
         }
         
-        struct CarsTheme: EmojiTheme{
+        struct CarsTheme: EmojiTheme {
             var name: String = "Cars"
             var emojis: [String] = ["🚗", "🚕", "🚙", "🚌", "🚎", "🏎", "🚓", "🚑", "🚒", "🚐", "🛻", "🚚", "🚛", "🚜"]
             var numberOfPairs: Int = 8
             var colorOfCard: String = "gray"
+            var secondColorForGradient: String = "red"
         }
         
-        struct FlagsTheme: EmojiTheme{
+    struct FlagsTheme: EmojiTheme {
             var name: String = "Flags"
             var emojis: [String] = ["🏳️", "🏴", "🏴‍☠️", "🏁", "🚩", "🇦🇺", "🇦🇬", "🇦🇶", "🇻🇳", "🇬🇵", "🇭🇰", "🇭🇳", "🇿🇼", "🇮🇱", "🇲🇨", "🇷🇪", "🇯🇵"]
             var numberOfPairs: Int = 9
             var colorOfCard: String = "yellow"
+            var secondColorForGradient: String = "gray"
         }
 }
 
-protocol EmojiTheme{
+protocol EmojiTheme {
     var name: String { get set }
     var emojis: [String] { get set }
     var numberOfPairs: Int { get set }
     var colorOfCard: String { get set }
+    var secondColorForGradient: String { get set }
 }
-

@@ -7,25 +7,27 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct MemorizeContentView: View {
+    
     @ObservedObject var viewModel: EmojiMemorize
     
     var body: some View {
-        VStack{
-            Text(EmojiMemorize.thema.name)
+        
+        VStack {
+            Text(EmojiMemorize.theme.name)
                 .font(.title)
                 .fontWeight(.bold)
                 
-            ScrollView{
+            ScrollView {
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 75))]){
                     ForEach(viewModel.cards) {card in
-                        CardView(card: card)
+                        CardView(card: card, color1: viewModel.convertColorOfThema(color: EmojiMemorize.theme.colorOfCard), color2: viewModel.convertColorOfThema(color: EmojiMemorize.theme.secondColorForGradient))
                             .aspectRatio(2/3, contentMode: .fit)
                             .onTapGesture {
                                 viewModel.choose(card)
                             }
                     }.padding(-1.0)
-                }.foregroundColor(viewModel.convertColorOfThema(color: EmojiMemorize.thema.colorOfCard))
+                }.foregroundColor(viewModel.convertColorOfThema(color: EmojiMemorize.theme.colorOfCard))
             }
             Spacer()
             .font(.largeTitle)
@@ -34,8 +36,7 @@ struct ContentView: View {
             Button(action: viewModel.newGame) {
                 Text("New Game")
                     .font(.title)
-                    .foregroundColor(viewModel.convertColorOfThema(color: EmojiMemorize.thema.colorOfCard))
-                    
+                    .foregroundColor(viewModel.convertColorOfThema(color: EmojiMemorize.theme.colorOfCard))
             }
         }
         .padding(.horizontal)
@@ -43,10 +44,11 @@ struct ContentView: View {
 }
 
 
-struct CardView: View{
+struct CardView: View {
     let card: MemorizeGame<String>.Card
-    
-    var body: some View{
+    var color1: Color
+    var color2: Color
+    var body: some View {
         let shape = RoundedRectangle(cornerRadius: 20)
         ZStack {
             if card.isFaceUp {
@@ -54,36 +56,22 @@ struct CardView: View{
                 shape.strokeBorder(lineWidth: 3)
                 Text(card.content)
                     .font(.largeTitle)
-            } else if card.isMatched{
+            } else if card.isMatched {
                 shape.opacity(0)
             } else {
-                shape.fill()
+                shape.fill(Gradient(colors: [color1, color2]))
             }
         }
     }
 }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+ 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         
         let game = EmojiMemorize()
         
-        ContentView(viewModel: game)
+        MemorizeContentView(viewModel: game)
             .preferredColorScheme(.dark)
-        ContentView(viewModel: game)
+        MemorizeContentView(viewModel: game)
     }
 }

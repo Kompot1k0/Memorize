@@ -10,15 +10,15 @@ import SwiftUI
 class EmojiMemorize: ObservableObject {
     
     static func createMemoryGame() -> MemorizeGame<String> {
-        let emojis = thema.emojis.shuffled()
-        return MemorizeGame<String>(numberOfPairsOfCards: thema.numberOfPairs) { pairIndex in emojis[pairIndex]
+        let emojis = theme.emojis.shuffled()
+        return MemorizeGame<String>(numberOfPairsOfCards: theme.numberOfPairs) { pairIndex in emojis[pairIndex]
         }
     }
     
     
     @Published private var model: MemorizeGame<String> = createMemoryGame()
     
-    static var thema: EmojiTheme = themes.animals
+    static var theme: EmojiTheme = themes.animals
     
     //MARK: Спросить почему так 
     var score: Int {
@@ -31,8 +31,8 @@ class EmojiMemorize: ObservableObject {
     
     func newGame() {
         let numberOfPairs = [6, 7, 8, 9, 10]
-        EmojiMemorize.thema = EmojiMemorize.chooseRandTheme()
-        EmojiMemorize.thema.numberOfPairs = numberOfPairs.randomElement() ?? 6
+        EmojiMemorize.theme = EmojiMemorize.chooseRandTheme()
+        EmojiMemorize.theme.numberOfPairs = numberOfPairs.randomElement() ?? 6
         model = EmojiMemorize.createMemoryGame()
     }
     
@@ -40,7 +40,7 @@ class EmojiMemorize: ObservableObject {
         model.choose(card)
     }
     
-    //MARK: initialize themes and choose default one
+    // MARK: initialize themes and choose default one
     struct Themes{
         var animals = MemorizeGame<String>.AnimalsTheme()
         var fruits = MemorizeGame<String>.FruitsTheme()
@@ -52,7 +52,7 @@ class EmojiMemorize: ObservableObject {
     
     static let themes = Themes()
     
-    static func chooseRandTheme() -> EmojiTheme{
+    static func chooseRandTheme() -> EmojiTheme {
         let randKey = Int.random(in: 1...6)
         if randKey == 1 {
             return EmojiMemorize.themes.animals
@@ -69,7 +69,7 @@ class EmojiMemorize: ObservableObject {
         }
     }
     
-    func convertColorOfThema (color: String) -> Color{
+    func convertColorOfThema (color: String) -> Color {
         if color == "red" {
             return Color.red
         } else if color == "orange" {

@@ -11,7 +11,10 @@ struct MemorizeGame<CardContent> where CardContent: Equatable {
     
     private(set) var cards: Array<Card>
     
-    private var indexOfOneFaceUpCard: Int?
+    private var indexOfOneFaceUpCard: Int? {
+            get { cards.indices.filter( { cards[$0].isFaceUp } ).oneAndOnly }
+            set { cards.indices.forEach( { cards[$0].isFaceUp = ($0 == newValue) }) }
+        }
     
     private(set) var score: Int = 0
     
@@ -31,14 +34,12 @@ struct MemorizeGame<CardContent> where CardContent: Equatable {
                     cards[potentialMatchIndex].isMatched)
                 cards[chosenIndex].isAlreadyBeenSeen = true
                 cards[potentialMatchIndex].isAlreadyBeenSeen = true
-                indexOfOneFaceUpCard = nil
+                cards[chosenIndex].isFaceUp = true
             } else {
-                for index in cards.indices {
-                    cards[index].isFaceUp = false
-                }
+                
                 indexOfOneFaceUpCard = chosenIndex
             }
-            cards[chosenIndex].isFaceUp.toggle()
+            
         }
     }
     
@@ -56,15 +57,15 @@ struct MemorizeGame<CardContent> where CardContent: Equatable {
     }
     
     struct Card: Identifiable {
-        var isFaceUp: Bool = false
-        var isMatched: Bool = false
-        var content: CardContent
-        var id: Int
-        var isAlreadyBeenSeen: Bool = false
+        var isFaceUp = true
+        var isMatched = false
+        let content: CardContent
+        let id: Int
+        var isAlreadyBeenSeen = false
     }
     
     init(numberOfPairsOfCards: Int, createCardContent: (Int) -> CardContent) {
-        cards = Array<Card>()
+        cards = []
         for pairIndex in 0..<numberOfPairsOfCards{
             let content = createCardContent(pairIndex)
             cards.append(Card(content: content, id: pairIndex*2))
@@ -145,4 +146,14 @@ protocol EmojiTheme {
     var numberOfPairs: Int { get set }
     var colorOfCard: String { get set }
     var secondColorForGradient: String { get set }
+}
+
+extension Array {
+    var oneAndOnly: Element? {
+        if self.count == 1 {
+            return self.first
+        } else {
+            return nil
+        }
+    }
 }

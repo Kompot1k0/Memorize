@@ -9,7 +9,7 @@ import SwiftUI
 
 struct MemorizeContentView: View {
     
-    @ObservedObject var viewModel: EmojiMemorize
+    @ObservedObject var game: EmojiMemorize
     
     var body: some View {
         
@@ -20,23 +20,23 @@ struct MemorizeContentView: View {
                 
             ScrollView {
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 75))]){
-                    ForEach(viewModel.cards) {card in
-                        CardView(card: card, color1: viewModel.convertColorOfThema(color: EmojiMemorize.theme.colorOfCard), color2: viewModel.convertColorOfThema(color: EmojiMemorize.theme.secondColorForGradient))
+                    ForEach(game.cards) {card in
+                        CardView(card: card, color1: game.convertColorOfThema(color: EmojiMemorize.theme.colorOfCard), color2: game.convertColorOfThema(color: EmojiMemorize.theme.secondColorForGradient))
                             .aspectRatio(2/3, contentMode: .fit)
                             .onTapGesture {
-                                viewModel.choose(card)
+                                game.choose(card)
                             }
                     }.padding(-1.0)
-                }.foregroundColor(viewModel.convertColorOfThema(color: EmojiMemorize.theme.colorOfCard))
+                }.foregroundColor(game.convertColorOfThema(color: EmojiMemorize.theme.colorOfCard))
             }
             Spacer()
             .font(.largeTitle)
-            Text("Score: \(viewModel.score)")
+            Text("Score: \(game.score)")
                 .font(.title3)
-            Button(action: viewModel.newGame) {
+            Button(action: game.newGame) {
                 Text("New Game")
                     .font(.title)
-                    .foregroundColor(viewModel.convertColorOfThema(color: EmojiMemorize.theme.colorOfCard))
+                    .foregroundColor(game.convertColorOfThema(color: EmojiMemorize.theme.colorOfCard))
             }
         }
         .padding(.horizontal)
@@ -46,32 +46,76 @@ struct MemorizeContentView: View {
 
 struct CardView: View {
     let card: MemorizeGame<String>.Card
+    
     var color1: Color
     var color2: Color
+    
     var body: some View {
-        let shape = RoundedRectangle(cornerRadius: 20)
-        ZStack {
-            if card.isFaceUp {
-                shape.fill().foregroundColor(.white)
-                shape.strokeBorder(lineWidth: 3)
-                Text(card.content)
-                    .font(.largeTitle)
-            } else if card.isMatched {
-                shape.opacity(0)
-            } else {
-                shape.fill(Gradient(colors: [color1, color2]))
+        GeometryReader { geometry in
+            ZStack {
+                let shape = RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius)
+                if card.isFaceUp {
+                    shape.fill().foregroundColor(.white)
+                    shape.strokeBorder(lineWidth: DrawingConstants.lineWidth)
+                    Text(card.content).font(font(in: geometry.size))
+                } else if card.isMatched {
+                    shape.opacity(0)
+                } else {
+                    shape.fill(Gradient(colors: [color1, color2]))
+                }
             }
         }
     }
+    
+    private func font(in size: CGSize) -> Font {
+        Font.system(size: min(size.width, size.height) * DrawingConstants.fontScale)
+    }
+     
+    private struct DrawingConstants {
+        static let cornerRadius: CGFloat = 18
+        static let lineWidth: CGFloat = 3
+        static let fontScale: CGFloat = 0.8
+    }
 }
- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         
         let game = EmojiMemorize()
         
-        MemorizeContentView(viewModel: game)
+        MemorizeContentView(game: game)
             .preferredColorScheme(.dark)
-        MemorizeContentView(viewModel: game)
+        MemorizeContentView(game: game)
     }
 }

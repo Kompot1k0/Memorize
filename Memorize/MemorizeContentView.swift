@@ -17,20 +17,21 @@ struct MemorizeContentView: View {
             Text(EmojiMemorize.theme.name)
                 .font(.title)
                 .fontWeight(.bold)
-                
-            ScrollView {
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 75))]){
-                    ForEach(game.cards) {card in
-                        CardView(card: card, color1: game.convertColorOfThema(color: EmojiMemorize.theme.colorOfCard), color2: game.convertColorOfThema(color: EmojiMemorize.theme.secondColorForGradient))
-                            .aspectRatio(2/3, contentMode: .fit)
-                            .onTapGesture {
-                                game.choose(card)
-                            }
-                    }.padding(-1.0)
-                }.foregroundColor(game.convertColorOfThema(color: EmojiMemorize.theme.colorOfCard))
-            }
+            
+            AspectVGrid(items: game.cards, aspectRatio: 2/3, content: { card in
+                if card.isMatched && !card.isFaceUp {
+                    Rectangle().opacity(0)
+                } else {
+                    CardView(card: card, color1: game.convertColorOfThema(color: EmojiMemorize.theme.colorOfCard), color2: game.convertColorOfThema(color: EmojiMemorize.theme.secondColorForGradient))
+                        .padding(4)
+                        .onTapGesture {
+                            game.choose(card)}
+                } })
+            
+            .padding(.horizontal)
+            .foregroundColor(game.convertColorOfThema(color: EmojiMemorize.theme.colorOfCard))
             Spacer()
-            .font(.largeTitle)
+                .font(.largeTitle)
             Text("Score: \(game.score)")
                 .font(.title3)
             Button(action: game.newGame) {
@@ -38,11 +39,10 @@ struct MemorizeContentView: View {
                     .font(.title)
                     .foregroundColor(game.convertColorOfThema(color: EmojiMemorize.theme.colorOfCard))
             }
+            .padding(.horizontal)
         }
-        .padding(.horizontal)
     }
 }
-
 
 struct CardView: View {
     let card: MemorizeGame<String>.Card
@@ -57,6 +57,9 @@ struct CardView: View {
                 if card.isFaceUp {
                     shape.fill().foregroundColor(.white)
                     shape.strokeBorder(lineWidth: DrawingConstants.lineWidth)
+                    PieShape(startAngle: Angle(degrees: 0-90), endAngle: Angle(degrees: 110-90))
+                        .padding(DrawingConstants.circlePadding)
+                        .opacity(DrawingConstants.circleOpacity)
                     Text(card.content).font(font(in: geometry.size))
                 } else if card.isMatched {
                     shape.opacity(0)
@@ -72,9 +75,11 @@ struct CardView: View {
     }
      
     private struct DrawingConstants {
-        static let cornerRadius: CGFloat = 18
+        static let cornerRadius: CGFloat = 12
         static let lineWidth: CGFloat = 3
-        static let fontScale: CGFloat = 0.8
+        static let fontScale: CGFloat = 0.55
+        static let circlePadding: CGFloat = 6
+        static let circleOpacity: CGFloat = 0.4
     }
 }
 
@@ -114,8 +119,8 @@ struct ContentView_Previews: PreviewProvider {
         
         let game = EmojiMemorize()
         
-        MemorizeContentView(game: game)
+//        game.choose(game.cards.first!)
+        return MemorizeContentView(game: game)
             .preferredColorScheme(.dark)
-        MemorizeContentView(game: game)
     }
 }
